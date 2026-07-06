@@ -7,6 +7,8 @@ export const useAuthStore = create((set, get) => ({
   user: null,
   accessToken: null,
   loading: false,
+  isAdmin: false,
+  isCheckingAuth: true,
   // sign up function
   signUp: async (name, email, password) => {
     set({ loading: true });
@@ -17,7 +19,11 @@ export const useAuthStore = create((set, get) => ({
         password,
       });
 
-      set({ user: response.data.user, accessToken: response.data.accessToken });
+      set({
+        user: response.data.user,
+        accessToken: response.data.accessToken,
+        isAdmin: response.data.user.role === "admin",
+      });
       return { success: true };
     } catch (err) {
       const errMsg = getErrMsg(err);
@@ -36,7 +42,11 @@ export const useAuthStore = create((set, get) => ({
         email,
         password,
       });
-      set({ user: response.data.user, accessToken: response.data.accessToken });
+      set({
+        user: response.data.user,
+        accessToken: response.data.accessToken,
+        isAdmin: response.data.user.role === "admin",
+      });
       return { success: true };
     } catch (err) {
       const errMsg = getErrMsg(err);
@@ -44,6 +54,23 @@ export const useAuthStore = create((set, get) => ({
       return { success: false };
     } finally {
       set({ loading: false });
+    }
+  },
+
+  // getProfile
+  getProfile: async () => {
+    set({ isCheckingAuth: true });
+    try {
+      const response = await axiosInstance.get("/auth/profile");
+      set({ user: response.data.user });
+      console.log(response);
+      return { success: true };
+    } catch (err) {
+      const errMsg = getErrMsg(err);
+      set({ user: null });
+      return { success: false, error: errMsg };
+    } finally {
+      set({ isCheckingAuth: false });
     }
   },
 }));

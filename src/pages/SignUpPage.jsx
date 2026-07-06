@@ -56,11 +56,12 @@ const SignUpPage = () => {
           </div>
 
           <div className="relative z-10 p-10 max-w-md">
-            <h2 className="text-white text-4xl font-bold max-w-md">
+            <h2
+              className="text-white text-4xl font-bold max-w-md cursor-pointer"
+              onClick={() => navigate("/")}
+            >
               SELL
-              <span className="text-orange-primary uppercase cursor-pointer">
-                Out
-              </span>
+              <span className="text-orange-primary uppercase ">Out</span>
             </h2>
 
             <div className="bg-surface/50 rounded-md flex items-center gap-2 w-fit px-4 my-5 py-1">

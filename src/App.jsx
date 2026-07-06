@@ -3,10 +3,11 @@ import SignUpPage from "./pages/SignUpPage";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import { Toaster } from "react-hot-toast";
-import Navbar from "../components/Navbar";
+
 import { useEffect } from "react";
 import { useAuthStore } from "./store/authStore";
 import { LoaderCircle } from "lucide-react";
+import AppLayout from "./pages/AppLayout";
 
 const App = () => {
   const { getProfile, user, isCheckingAuth } = useAuthStore();
@@ -27,7 +28,9 @@ const App = () => {
       <Toaster position="top-center" />
       <main className="h-dvh bg-background">
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<AppLayout />}>
+            <Route index element={<HomePage />} />
+          </Route>
           <Route path="/sign-up" element={<SignUpPage />} />
           <Route path="/login" element={<LoginPage />} />
         </Routes>

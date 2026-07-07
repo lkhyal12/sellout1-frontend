@@ -56,11 +56,17 @@ const Navbar = () => {
 
           {!user && (
             <div className="flex items-center gap-3">
-              <button className="bg-surface text-gray-300 flex items-center gap-1 px-2 py-1 font-semibold text-sm rounded-lg cursor-pointer">
+              <button
+                className="bg-surface text-gray-300 flex items-center gap-1 px-2 py-1 font-semibold text-sm rounded-lg cursor-pointer"
+                onClick={() => navigate("/sign-up")}
+              >
                 Sign Up <User size={20} />
               </button>
 
-              <button className="bg-orange-primary text-gray-300 flex items-center gap-1 px-2 py-1 font-semibold rounded-lg cursor-pointer text-sm">
+              <button
+                className="bg-orange-primary text-gray-300 flex items-center gap-1 px-2 py-1 font-semibold rounded-lg cursor-pointer text-sm"
+                onClick={() => navigate("/login")}
+              >
                 Log In <LogIn size={20} />
               </button>
             </div>

@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { useAuthStore } from "./store/authStore";
 import { LoaderCircle } from "lucide-react";
 import AppLayout from "./pages/AppLayout";
+import CategoriesPage from "./pages/CategoriesPage";
 
 const App = () => {
   const { getProfile, user, isCheckingAuth } = useAuthStore();
@@ -30,6 +31,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<AppLayout />}>
             <Route index element={<HomePage />} />
+            <Route path="/categories" element={<CategoriesPage />} />
           </Route>
           <Route path="/sign-up" element={<SignUpPage />} />
           <Route path="/login" element={<LoginPage />} />

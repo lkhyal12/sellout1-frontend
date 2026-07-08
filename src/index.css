@@ -55,3 +55,10 @@
   margin-bottom: 10px;
   text-align: center;
 }
+
+.msg {
+  font-size: clamp(2rem, 5vw, 4rem);
+  color: var(--color-error);
+  font-weight: bold;
+  text-align: center;
+}

@@ -57,6 +57,26 @@ export const useAuthStore = create((set, get) => ({
     }
   },
 
+  // verify email function
+  verifyEmail: async (email, code) => {
+    set({ loading: true });
+    try {
+      const response = await axiosInstance.post("/auth/verify-email", {
+        email,
+        code,
+      });
+
+      set({ user: response.data.user });
+      return { success: true };
+    } catch (err) {
+      const errMsg = getErrMsg(err);
+      toast.error(errMsg, { id: "error verifyin email" });
+      return { success: false };
+    } finally {
+      set({ loading: false });
+    }
+  },
+
   // getProfile
   getProfile: async () => {
     set({ isCheckingAuth: true });

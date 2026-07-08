@@ -9,6 +9,7 @@ import { useAuthStore } from "./store/authStore";
 import { LoaderCircle } from "lucide-react";
 import AppLayout from "./pages/AppLayout";
 import CategoriesPage from "./pages/CategoriesPage";
+import VerifyEmailPage from "./pages/VerifyEmailPage";
 
 const App = () => {
   const { getProfile, user, isCheckingAuth } = useAuthStore();
@@ -35,6 +36,7 @@ const App = () => {
           </Route>
           <Route path="/sign-up" element={<SignUpPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/verify-email" element={<VerifyEmailPage />} />
         </Routes>
       </main>
     </>

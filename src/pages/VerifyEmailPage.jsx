@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import envelopeImg from "../assets/envelope1.png";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { Loader, Mail, ShieldCheck } from "lucide-react";
 import toast from "react-hot-toast";
 import { useAuthStore } from "../store/authStore";
@@ -77,7 +77,8 @@ const VerifyEmailPage = () => {
       handleSubmit();
     }
   }, [code]);
-  if (email)
+  if (user && user.verified) return <Navigate to="/" replace={true} />;
+  if (!email)
     return (
       <div className="h-dvh w-full overflow-hidden flex items-center justify-center">
         <h2
@@ -158,9 +159,7 @@ const VerifyEmailPage = () => {
             <p className="text-text-secondary mb-3">
               Enter the 6-digit code sent to
             </p>
-            <h5 className=" font-bold text-orange-primary">
-              jhondoe@example.com
-            </h5>
+            <h5 className=" font-bold text-orange-primary">{email}</h5>
             <div className="flex items-center justify-between w-full">
               {code.map((digit, i) => (
                 <input

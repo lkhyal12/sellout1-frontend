@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import SignUpPage from "./pages/SignUpPage";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
@@ -10,6 +10,9 @@ import { LoaderCircle } from "lucide-react";
 import AppLayout from "./pages/AppLayout";
 import CategoriesPage from "./pages/CategoriesPage";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
+import EmailCheckPage from "./pages/EmailCheckPage";
 
 const App = () => {
   const { getProfile, user, isCheckingAuth } = useAuthStore();
@@ -17,13 +20,15 @@ const App = () => {
   useEffect(() => {
     getProfile();
   }, [getProfile]);
-
+  console.log({ user });
   if (isCheckingAuth)
     return (
       <div className="h-dvh w-full flex items-center justify-center bg-background text-white">
         <LoaderCircle size={60} className="animate-spin" />
       </div>
     );
+  if (!isCheckingAuth && user && !user.verified)
+    return <Navigate to="/verify-email" />;
   return (
     <>
       {/* <Navbar /> */}
@@ -37,6 +42,9 @@ const App = () => {
           <Route path="/sign-up" element={<SignUpPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/verify-email" element={<VerifyEmailPage />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:code" element={<ResetPasswordPage />} />
+          <Route path="/email-check" element={<EmailCheckPage />} />
         </Routes>
       </main>
     </>

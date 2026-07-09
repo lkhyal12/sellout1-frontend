@@ -39,7 +39,7 @@ const SignUpPage = () => {
         id: "condtions",
       });
     const { success } = await signUp(name, email, password);
-    if (success) return navigate("/");
+    if (success) return navigate("/verify-email", { state: { email } });
   }
   return (
     <div className="h-dvh w-full flex items-center justify-center">
@@ -189,7 +189,7 @@ const SignUpPage = () => {
                 </label>
                 <input
                   id="password"
-                  type="text"
+                  type="password"
                   placeholder="Enter your password"
                   className="w-full p-2 outline-none border-divider border text-white bg-surface/50 rounded-md"
                   name="password"
@@ -207,7 +207,7 @@ const SignUpPage = () => {
                 </label>
                 <input
                   id="password"
-                  type="text"
+                  type="password"
                   placeholder="Confirm your password"
                   className="w-full p-2 outline-none border-divider border text-white bg-surface/50 rounded-md"
                   name="confirmPassword"

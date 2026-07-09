@@ -1,11 +1,11 @@
 import { useAuthStore } from "../store/authStore";
 import { Link, useNavigate } from "react-router-dom";
 import { LogIn, LogOut, ShoppingCart, User } from "lucide-react";
+import { useCartStore } from "../store/cartStore";
 
 const Navbar = () => {
-  const { user } = useAuthStore();
-  const isAdmin = true;
-  const cart = [1];
+  const { user, isAdmin } = useAuthStore();
+  const { cart } = useCartStore();
   const navigate = useNavigate();
   return (
     <div className=" text-white fixed top-0 left-0 right-0 px-5 md:px-0 bg-background h-15 flex items-center justify-center">

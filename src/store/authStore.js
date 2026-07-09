@@ -93,4 +93,42 @@ export const useAuthStore = create((set, get) => ({
       set({ isCheckingAuth: false });
     }
   },
+
+  sendForgotPasswordLink: async (email) => {
+    set({ loading: true });
+
+    try {
+      const response = await axiosInstance.post(
+        "/auth/send-password-reset-link",
+        { email },
+      );
+      toast.success("Reset password link was sent");
+      return { success: true };
+    } catch (err) {
+      const errMsg = getErrMsg(err);
+      toast.error(errMsg, { id: "passwordResetError" });
+      return { success: false };
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  // reset password function
+  resetPassword: async (code, password) => {
+    set({ loading: true });
+    try {
+      const response = await axiosInstance.post(
+        "/auth/reset-password/" + code,
+        { password },
+      );
+      toast.success("Password reset successfully");
+      return { success: true };
+    } catch (err) {
+      const errMsg = getErrMsg(err);
+      toast.error(errMsg, { id: errMsg });
+      return { success: false };
+    } finally {
+      set({ loading: false });
+    }
+  },
 }));

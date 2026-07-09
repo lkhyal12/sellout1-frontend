@@ -14,7 +14,7 @@ const ForgotPassword = () => {
     if (!email?.trim())
       return toast.error("Email is Required to send a reset Link");
     const { success } = await sendForgotPasswordLink(email);
-    if (success) return navigate("/email-check");
+    if (success) return navigate("/email-check", { state: { email } });
   }
   return (
     <div className="h-dvh w-full overflow-hidden">

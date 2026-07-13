@@ -100,7 +100,7 @@ const LoginPage = () => {
             SELL<span className="text-orange-primary">OUT</span>
           </h2>
           <h2 className="text-white text-2xl md:text-3xl font-bold">
-            Create Your Account
+            Welcome Back!
           </h2>
 
           <p className=" mt-5 text-text-secondary">

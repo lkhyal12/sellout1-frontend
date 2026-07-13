@@ -13,6 +13,8 @@ import VerifyEmailPage from "./pages/VerifyEmailPage";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import EmailCheckPage from "./pages/EmailCheckPage";
+import ProductsPage from "./pages/ProductsPage";
+import CartPage from "./pages/CartPage";
 
 const App = () => {
   const { getProfile, user, isCheckingAuth } = useAuthStore();
@@ -33,11 +35,13 @@ const App = () => {
     <>
       {/* <Navbar /> */}
       <Toaster position="top-center" />
-      <main className="h-dvh bg-background">
+      <main className="min-h-dvh bg-background">
         <Routes>
           <Route path="/" element={<AppLayout />}>
             <Route index element={<HomePage />} />
             <Route path="/categories" element={<CategoriesPage />} />
+            <Route path="/categories/:category" element={<ProductsPage />} />
+            <Route path="/cart" element={<CartPage />} />
           </Route>
           <Route path="/sign-up" element={<SignUpPage />} />
           <Route path="/login" element={<LoginPage />} />

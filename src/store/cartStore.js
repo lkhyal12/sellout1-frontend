@@ -1,13 +1,15 @@
 import { create } from "zustand";
 import axiosInstance from "../lib/axios";
 import { getErrMsg } from "../lib/utils";
+import toast from "react-hot-toast";
 
 export const useCartStore = create((set) => ({
   cart: [],
   loading: false,
   error: null,
+  laodingProducts: false,
   getCartProducts: async () => {
-    set({ laoding: true });
+    set({ laodingProducts: true });
     try {
       const response = await axiosInstance.get("/cart");
       set({ cart: response.data.cart });
@@ -15,7 +17,20 @@ export const useCartStore = create((set) => ({
       const errMsg = getErrMsg(err);
       set({ error: errMsg });
     } finally {
-      set({ loading: false });
+      set({ laodingProducts: false });
+    }
+  },
+
+  // add to cart function
+  addToCartFun: async (productId) => {
+    set({ loading: true });
+    try {
+      const response = await axiosInstance.post("/cart/items", { productId });
+      set({ cart: response.data.cart });
+      toast.success("product added to cart successfully");
+    } catch (err) {
+      const errMsg = getErrMsg(err);
+      toast.error(errMsg, { id: errMsg });
     }
   },
 }));

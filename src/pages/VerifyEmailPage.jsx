@@ -1,16 +1,21 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import envelopeImg from "../assets/envelope1.png";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { Loader, Mail, ShieldCheck } from "lucide-react";
 import toast from "react-hot-toast";
 import { useAuthStore } from "../store/authStore";
 const VerifyEmailPage = () => {
   const [code, setCode] = useState(Array.from({ length: 6 }).fill(""));
-  const { loading, user, verifyEmail } = useAuthStore();
+  const {
+    loading,
+    user,
+    verifyEmail,
+    sendEmailVerificationCode,
+    isSendingEmail,
+    logout,
+  } = useAuthStore();
   const inputsRef = useRef([]);
   const navigate = useNavigate();
-  const location = useLocation();
-  const email = location.state?.email;
 
   function handleChange(e, idx) {
     const value = e.target.value.trim();
@@ -58,7 +63,7 @@ const VerifyEmailPage = () => {
       });
 
     const codeJoind = code.join("");
-    const { success } = await verifyEmail(email, codeJoind);
+    const { success } = await verifyEmail(user.email, codeJoind);
     if (success) {
       toast.success("Email verified successfully");
       return navigate("/");
@@ -69,6 +74,12 @@ const VerifyEmailPage = () => {
   function handleClick(index) {
     inputsRef.current[index]?.setSelectionRange(1, 1);
   }
+
+  // handle logout
+  async function handleLogout() {
+    const { success } = await logout();
+    if (success) return navigate("/login");
+  }
   useEffect(() => {
     inputsRef.current[0]?.focus();
   }, []);
@@ -78,18 +89,8 @@ const VerifyEmailPage = () => {
     }
   }, [code]);
   if (user && user.verified) return <Navigate to="/" replace={true} />;
-  if (!email)
-    return (
-      <div className="h-dvh w-full overflow-hidden flex items-center justify-center">
-        <h2
-          className="block md:hidden text-3xl absolute -top-3 left-1/2 transform -translate-x-1/2 font-bold my-5 text-center text-white cursor-pointer w-full bg-surface py-5"
-          onClick={() => navigate("/")}
-        >
-          SELL<span className="text-orange-primary">OUT</span>
-        </h2>
-        <h2 className="msg text-error">Missing Email Address</h2>
-      </div>
-    );
+  if (!user) return <Navigate to="/login" replace={true} />;
+
   return (
     <div className="h-dvh w-full overflow-hidden">
       <div className="grid grid-cols-1 md:grid-cols-2">
@@ -159,7 +160,7 @@ const VerifyEmailPage = () => {
             <p className="text-text-secondary mb-3">
               Enter the 6-digit code sent to
             </p>
-            <h5 className=" font-bold text-orange-primary">{email}</h5>
+            <h5 className=" font-bold text-orange-primary">{user.email}</h5>
             <div className="flex items-center justify-between w-full">
               {code.map((digit, i) => (
                 <input
@@ -177,7 +178,10 @@ const VerifyEmailPage = () => {
 
             <p className="text-text-secondary my-5">
               Didn't receive the code?{" "}
-              <span className="text-orange-primary font-semibold">
+              <span
+                className="text-orange-primary font-semibold cursor-pointer "
+                onClick={() => sendEmailVerificationCode(user.email)}
+              >
                 Resend code now
               </span>
             </p>
@@ -200,14 +204,26 @@ const VerifyEmailPage = () => {
               <div className="bg-gray-600 h-px rounded-2xl flex-1"></div>
             </div>
 
-            <button className="w-full outline-none bg-surface border border-gray-500 text-white flex justify-center items-center h-10 font-bold rounded-lg cursor-pointer py-1 gap-2">
-              <Mail size={20} />
-              Resend Code
+            <button
+              className="w-full outline-none bg-surface border border-gray-500 text-white flex justify-center items-center h-10 font-bold rounded-lg cursor-pointer py-1 gap-2"
+              onClick={() => sendEmailVerificationCode(user.email)}
+            >
+              {isSendingEmail ? (
+                <Loader size={20} className="animate-spin" />
+              ) : (
+                <>
+                  <Mail size={20} />
+                  Resend Code
+                </>
+              )}
             </button>
 
             <p className="text-text-secondary my-5 text-center">
               Wrong email address?
-              <span className="ml-2 text-orange-primary font-semibold">
+              <span
+                className="ml-2 text-orange-primary font-semibold cursor-pointer"
+                onClick={handleLogout}
+              >
                 Change Email
               </span>
             </p>

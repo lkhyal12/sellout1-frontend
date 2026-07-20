@@ -1,31 +1,15 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useCartStore } from "../store/cartStore";
-import { Lock, ShieldCheck, ShoppingBag, Trash } from "lucide-react";
-const products = [
-  {
-    product: {
-      name: "High End Jeans",
-      price: 120,
-      image: "/jeans.jpg",
-      category: "jeans",
-      _id: 1,
-    },
-    quantity: 1,
-  },
-  {
-    product: {
-      name: "High End Jeans",
-      price: 120,
-      image: "/jeans.jpg",
-      category: "jeans",
-      _id: 1,
-    },
-    quantity: 1,
-  },
-];
+import {
+  LoaderCircle,
+  Lock,
+  ShieldCheck,
+  ShoppingBag,
+  Trash,
+} from "lucide-react";
 
 const CartPage = () => {
-  const { cart, loading, laodingProducts } = useCartStore();
+  const { cart, laodingProducts, getCartProducts } = useCartStore();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
@@ -35,6 +19,16 @@ const CartPage = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    getCartProducts();
+  }, [getCartProducts]);
+  if (laodingProducts)
+    return (
+      <div className="h-dvh w-full flex items-center justify-center bg-background text-white">
+        <LoaderCircle size={60} className="animate-spin" />
+      </div>
+    );
   return (
     <div className="min-h-dvh pt-20 pb-10 max-sm:px-4">
       <div className="container mx-auto h-full">
@@ -52,11 +46,11 @@ const CartPage = () => {
         <div className="flex flex-col lg:flex-row gap-5">
           {windowWidth <= 576 ? (
             <div>
-              <MobileProductsDesign products={products} />
+              <MobileProductsDesign products={cart} />
             </div>
           ) : (
             <div className="lg:w-7/10 bg-surface px-2 rounded-lg ">
-              <DeskTopProductsContainer products={products} />
+              <DeskTopProductsContainer products={cart} />
             </div>
           )}
           <div className="bg-surface rounded-lg shadow w-full lg:w-1/3 p-4 h-full">
@@ -76,7 +70,7 @@ const CartPage = () => {
               <div className="flex flex-col gap-1  mt-4 text-text-secondary text-sm h-fit ">
                 <span className="font-semibold text-white">
                   $
-                  {products
+                  {cart
                     .reduce((a, e) => a + e.product.price * e.quantity, 0)
                     .toFixed(2)}
                 </span>

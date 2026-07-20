@@ -3,12 +3,13 @@ import axiosInstance from "../lib/axios";
 import toast from "react-hot-toast";
 import { getErrMsg } from "../lib/utils";
 
-export const useAuthStore = create((set, get) => ({
+export const useAuthStore = create((set) => ({
   user: null,
   accessToken: null,
   loading: false,
   isAdmin: false,
   isCheckingAuth: true,
+  isSendingEmail: false,
   // sign up function
   signUp: async (name, email, password) => {
     set({ loading: true });
@@ -56,7 +57,22 @@ export const useAuthStore = create((set, get) => ({
       set({ loading: false });
     }
   },
-
+  // logout function
+  logout: async () => {
+    set({ loading: true });
+    try {
+      await axiosInstance.post("/auth/logout");
+      toast.success("Logged out successfully");
+      set({ user: null, isAdmin: false });
+      return { success: true };
+    } catch (err) {
+      const errMsg = getErrMsg(err);
+      toast.error(errMsg);
+      return { success: false };
+    } finally {
+      set({ loading: false });
+    }
+  },
   // verify email function
   verifyEmail: async (email, code) => {
     set({ loading: true });
@@ -66,7 +82,10 @@ export const useAuthStore = create((set, get) => ({
         code,
       });
 
-      set({ user: response.data.user });
+      set({
+        user: response.data.user,
+        isAdmin: response.data.user.role === "admin",
+      });
       return { success: true };
     } catch (err) {
       const errMsg = getErrMsg(err);
@@ -82,7 +101,10 @@ export const useAuthStore = create((set, get) => ({
     set({ isCheckingAuth: true });
     try {
       const response = await axiosInstance.get("/auth/profile");
-      set({ user: response.data.user });
+      set({
+        user: response.data.user,
+        isAdmin: response.data.user.role === "admin",
+      });
       console.log(response);
       return { success: true };
     } catch (err) {
@@ -129,6 +151,24 @@ export const useAuthStore = create((set, get) => ({
       return { success: false };
     } finally {
       set({ loading: false });
+    }
+  },
+
+  // send email verification code function
+  sendEmailVerificationCode: async (email) => {
+    set({ isSendingEmail: true });
+    try {
+      const response = await axiosInstance.post(
+        "/auth/send-email-verification",
+        { email },
+      );
+      toast.success("Verification code was sent to your email");
+      return { success: true };
+    } catch (err) {
+      const errMsg = getErrMsg(err);
+      toast.error(errMsg, { id: "verification code error" });
+    } finally {
+      set({ isSendingEmail: false });
     }
   },
 }));

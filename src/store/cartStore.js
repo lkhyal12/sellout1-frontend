@@ -3,7 +3,7 @@ import axiosInstance from "../lib/axios";
 import { getErrMsg } from "../lib/utils";
 import toast from "react-hot-toast";
 
-export const useCartStore = create((set) => ({
+export const useCartStore = create((set, get) => ({
   cart: [],
   loading: false,
   error: null,
@@ -31,6 +31,21 @@ export const useCartStore = create((set) => ({
     } catch (err) {
       const errMsg = getErrMsg(err);
       toast.error(errMsg, { id: errMsg });
+    }
+  },
+
+  // remove from Cart
+  removeFromCart: async (poroductId) => {
+    set({ loading: true });
+    try {
+      const response = await axiosInstance.post("/cart/items/" + productId);
+      toast.success("Product removed from cart", {
+        id: "remove product from cart",
+      });
+      set({ cart: get().cart.filter((p) => p._id !== productId) });
+    } catch (err) {
+      const errMsg = getErrMsg(err);
+      toast.error(errMsg, { id: "error in removing from cart" });
     }
   },
 }));

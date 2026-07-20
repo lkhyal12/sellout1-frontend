@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import SignUpPage from "./pages/SignUpPage";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
@@ -15,10 +15,11 @@ import ResetPasswordPage from "./pages/ResetPasswordPage";
 import EmailCheckPage from "./pages/EmailCheckPage";
 import ProductsPage from "./pages/ProductsPage";
 import CartPage from "./pages/CartPage";
+import DashboardPage from "./pages/DashboardPage";
 
 const App = () => {
   const { getProfile, user, isCheckingAuth } = useAuthStore();
-
+  const location = useLocation();
   useEffect(() => {
     getProfile();
   }, [getProfile]);
@@ -29,7 +30,12 @@ const App = () => {
         <LoaderCircle size={60} className="animate-spin" />
       </div>
     );
-  if (!isCheckingAuth && user && !user.verified)
+  if (
+    !isCheckingAuth &&
+    user &&
+    !user.verified &&
+    location.pathname !== "/verify-email"
+  )
     return <Navigate to="/verify-email" />;
   return (
     <>
@@ -42,6 +48,7 @@ const App = () => {
             <Route path="/categories" element={<CategoriesPage />} />
             <Route path="/categories/:category" element={<ProductsPage />} />
             <Route path="/cart" element={<CartPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
           </Route>
           <Route path="/sign-up" element={<SignUpPage />} />
           <Route path="/login" element={<LoginPage />} />

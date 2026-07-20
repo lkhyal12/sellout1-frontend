@@ -1,6 +1,15 @@
-import { ShoppingCart } from "lucide-react";
+import { Loader, ShoppingCart } from "lucide-react";
+import { useCartStore } from "../store/cartStore";
+import { useState } from "react";
 
 const ProductCard = ({ product }) => {
+  const { addToCartFun } = useCartStore();
+  const [loading, setLoading] = useState(false);
+  async function handleAddToCart(productId) {
+    setLoading(true);
+    await addToCartFun(productId);
+    setLoading(false);
+  }
   return (
     <div className="w-full bg-surface rounded-xl shadow overflow-hidden">
       <img
@@ -14,8 +23,18 @@ const ProductCard = ({ product }) => {
           ${product.price.toFixed(2)}
         </h4>
 
-        <button className="w-full bg-orange-primary text-white rounded-lg cursor-pointer flex items-center justify-center gap-2 py-2">
-          <ShoppingCart size={20} /> Add to cart
+        <button
+          className="w-full bg-orange-primary text-white rounded-lg cursor-pointer  flex items-center justify-center gap-2 py-2 disabled:opacity-60 disabled:pointer-events-none"
+          onClick={() => handleAddToCart(product._id)}
+          disabled={loading}
+        >
+          {loading ? (
+            <Loader size={20} className="animate-spin" />
+          ) : (
+            <>
+              <ShoppingCart size={20} /> Add to cart
+            </>
+          )}
         </button>
       </div>
     </div>

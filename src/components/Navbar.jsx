@@ -4,9 +4,14 @@ import { LogIn, LogOut, ShoppingCart, User } from "lucide-react";
 import { useCartStore } from "../store/cartStore";
 
 const Navbar = () => {
-  const { user, isAdmin } = useAuthStore();
+  const { user, isAdmin, logout } = useAuthStore();
   const { cart } = useCartStore();
   const navigate = useNavigate();
+
+  async function handleLogout() {
+    const { success } = await logout();
+    if (success) return navigate("/login");
+  }
   return (
     <div className=" text-white fixed top-0 left-0 right-0 px-5 md:px-0 bg-background h-15 flex items-center justify-center">
       <div className="container py-2 flex items-center justify-between mx-auto">
@@ -49,7 +54,10 @@ const Navbar = () => {
           )}
 
           {user && (
-            <button className="bg-surface text-gray-300 flex items-center gap-1 px-2 py-1 font-semibold rounded-lg cursor-pointer">
+            <button
+              onClick={handleLogout}
+              className="bg-red-600 text-white flex items-center gap-1 px-2 py-1 font-semibold rounded-lg cursor-pointer"
+            >
               Logout <LogOut size={20} />
             </button>
           )}

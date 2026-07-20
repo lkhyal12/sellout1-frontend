@@ -7,9 +7,16 @@ import {
   ShoppingBag,
   Trash,
 } from "lucide-react";
+import EmptyCart from "../components/EmptyCart";
 
 const CartPage = () => {
-  const { cart, laodingProducts, getCartProducts } = useCartStore();
+  const {
+    cart,
+    laodingProducts,
+    getCartProducts,
+    updateQuantity,
+    removeFromCart,
+  } = useCartStore();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
@@ -23,12 +30,14 @@ const CartPage = () => {
   useEffect(() => {
     getCartProducts();
   }, [getCartProducts]);
+
   if (laodingProducts)
     return (
       <div className="h-dvh w-full flex items-center justify-center bg-background text-white">
         <LoaderCircle size={60} className="animate-spin" />
       </div>
     );
+  if (!cart.length) return <EmptyCart />;
   return (
     <div className="min-h-dvh pt-20 pb-10 max-sm:px-4">
       <div className="container mx-auto h-full">
@@ -46,11 +55,19 @@ const CartPage = () => {
         <div className="flex flex-col lg:flex-row gap-5">
           {windowWidth <= 576 ? (
             <div>
-              <MobileProductsDesign products={cart} />
+              <MobileProductsDesign
+                products={cart}
+                updateQuantity={updateQuantity}
+                removeFromCart={removeFromCart}
+              />
             </div>
           ) : (
             <div className="lg:w-7/10 bg-surface px-2 rounded-lg ">
-              <DeskTopProductsContainer products={cart} />
+              <DeskTopProductsContainer
+                products={cart}
+                updateQuantity={updateQuantity}
+                removeFromCart={removeFromCart}
+              />
             </div>
           )}
           <div className="bg-surface rounded-lg shadow w-full lg:w-1/3 p-4 h-full">
@@ -91,7 +108,11 @@ const CartPage = () => {
   );
 };
 
-function DeskTopProductsContainer({ products }) {
+function DeskTopProductsContainer({
+  products,
+  updateQuantity,
+  removeFromCart,
+}) {
   return (
     <table className="w-full border-collapse">
       <thead className="text-text-secondary">
@@ -143,11 +164,19 @@ function DeskTopProductsContainer({ products }) {
                 <button
                   className="text-xl font-bold bg-background rounded w-7 aspect-square cursor-pointer disabled:text-text-secondary disabled:opacity-80 disabled:pointer-events-none flex items-center justify-center"
                   disabled={item.quantity <= 1}
+                  onClick={async () =>
+                    await updateQuantity(item.product._id, item.quantity - 1)
+                  }
                 >
                   -
                 </button>
                 <span> {item.quantity}</span>
-                <button className="text-xl font-bold bg-background rounded w-7 aspect-square cursor-pointer disabled:text-text-secondary disabled:opacity-60 flex items-center justify-center">
+                <button
+                  className="text-xl font-bold bg-background rounded w-7 aspect-square cursor-pointer disabled:text-text-secondary disabled:opacity-60 flex items-center justify-center"
+                  onClick={async () =>
+                    await updateQuantity(item.product._id, item.quantity + 1)
+                  }
+                >
                   +
                 </button>
               </div>
@@ -162,6 +191,7 @@ function DeskTopProductsContainer({ products }) {
               <Trash
                 size={20}
                 className="text-error cursor-pointer text-center inline-block"
+                onClick={async () => await removeFromCart(item.product._id)}
               />
             </td>
           </tr>
@@ -171,7 +201,7 @@ function DeskTopProductsContainer({ products }) {
   );
 }
 
-function MobileProductsDesign({ products }) {
+function MobileProductsDesign({ products, updateQuantity, removeFromCart }) {
   return (
     <>
       {products.map((item) => (
@@ -200,15 +230,27 @@ function MobileProductsDesign({ products }) {
               <button
                 className="text-xl font-bold bg-background rounded w-7 aspect-square cursor-pointer  text-white disabled:text-text-secondary disabled:opacity-80 disabled:pointer-events-none flex items-center justify-center"
                 disabled={item.quantity <= 1}
+                onClick={async () =>
+                  await updateQuantity(item.product._id, item.quantity - 1)
+                }
               >
                 -
               </button>
               <span className="font-bold text-white"> {item.quantity}</span>
-              <button className="text-xl text-white font-bold bg-background rounded w-7 aspect-square cursor-pointer disabled:text-text-secondary disabled:opacity-60 flex items-center justify-center">
+              <button
+                className="text-xl text-white font-bold bg-background rounded w-7 aspect-square cursor-pointer disabled:text-text-secondary disabled:opacity-60 flex items-center justify-center"
+                onClick={async () =>
+                  await updateQuantity(item.product._id, item.quantity + 1)
+                }
+              >
                 +
               </button>
             </div>
-            <Trash size={20} className="cursor-pointer text-error" />
+            <Trash
+              size={20}
+              className="cursor-pointer text-error"
+              onClick={async () => removeFromCart(item.product._id)}
+            />
           </div>
         </div>
       ))}

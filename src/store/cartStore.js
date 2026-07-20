@@ -35,17 +35,35 @@ export const useCartStore = create((set, get) => ({
   },
 
   // remove from Cart
-  removeFromCart: async (poroductId) => {
+  removeFromCart: async (productId) => {
     set({ loading: true });
     try {
-      const response = await axiosInstance.post("/cart/items/" + productId);
+      const response = await axiosInstance.delete("/cart/items/" + productId);
       toast.success("Product removed from cart", {
         id: "remove product from cart",
       });
-      set({ cart: get().cart.filter((p) => p._id !== productId) });
+      set({ cart: get().cart.filter((p) => p.product._id !== productId) });
     } catch (err) {
       const errMsg = getErrMsg(err);
       toast.error(errMsg, { id: "error in removing from cart" });
+    }
+  },
+  // update quantity
+  updateQuantity: async (productId, quantity) => {
+    try {
+      const response = await axiosInstance.patch("/cart/items/" + productId, {
+        quantity,
+      });
+
+      set({
+        cart: get().cart.map((p) => {
+          if (p.product._id === productId) return { ...p, quantity };
+          return p;
+        }),
+      });
+    } catch (err) {
+      const errMsg = getErrMsg(err);
+      toast.error(errMsg);
     }
   },
 }));

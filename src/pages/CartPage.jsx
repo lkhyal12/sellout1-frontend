@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useCartStore } from "../store/cartStore";
 import {
+  Loader,
   LoaderCircle,
   Lock,
   ShieldCheck,
@@ -16,6 +17,8 @@ const CartPage = () => {
     getCartProducts,
     updateQuantity,
     removeFromCart,
+    createStripeSession,
+    loadingSession,
   } = useCartStore();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
@@ -96,9 +99,19 @@ const CartPage = () => {
               </div>
             </div>
             <div className="flex-1 ">
-              <button className="bg-orange-primary text-white flex items-center justify-center gap-2 cursor-pointer rounded-lg w-full mt-4 h-9">
-                <Lock size={15} />
-                Procced To Checkout
+              <button
+                className="bg-orange-primary text-white flex items-center justify-center gap-2 cursor-pointer rounded-lg w-full mt-4 h-9 disabled:opacity-60 disabled:pointer-events-none"
+                disabled={loadingSession}
+                onClick={createStripeSession}
+              >
+                {loadingSession ? (
+                  <Loader size={20} className="animate-spin" />
+                ) : (
+                  <>
+                    <Lock size={15} />
+                    Procced To Checkout
+                  </>
+                )}
               </button>
             </div>
           </div>

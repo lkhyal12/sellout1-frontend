@@ -2,16 +2,21 @@ import { useAuthStore } from "../store/authStore";
 import { Link, useNavigate } from "react-router-dom";
 import { LogIn, LogOut, ShoppingCart, User } from "lucide-react";
 import { useCartStore } from "../store/cartStore";
+import { useEffect } from "react";
 
 const Navbar = () => {
   const { user, isAdmin, logout } = useAuthStore();
-  const { cart } = useCartStore();
+  const { cart, getCartProducts } = useCartStore();
   const navigate = useNavigate();
 
   async function handleLogout() {
     const { success } = await logout();
     if (success) return navigate("/login");
   }
+
+  useEffect(() => {
+    getCartProducts();
+  }, [getCartProducts]);
   return (
     <div className=" text-white fixed top-0 left-0 right-0 px-5 md:px-0 bg-background h-15 flex items-center justify-center">
       <div className="container py-2 flex items-center justify-between mx-auto">

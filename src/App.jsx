@@ -16,6 +16,8 @@ import EmailCheckPage from "./pages/EmailCheckPage";
 import ProductsPage from "./pages/ProductsPage";
 import CartPage from "./pages/CartPage";
 import DashboardPage from "./pages/DashboardPage";
+import AboutPage from "./pages/AboutPage";
+import CheckoutSuccessPage from "./pages/CheckoutSuccessPage";
 
 const App = () => {
   const { getProfile, user, isCheckingAuth } = useAuthStore();
@@ -49,6 +51,8 @@ const App = () => {
             <Route path="/categories/:category" element={<ProductsPage />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/checkout-success" element={<CheckoutSuccessPage />} />
           </Route>
           <Route path="/sign-up" element={<SignUpPage />} />
           <Route path="/login" element={<LoginPage />} />

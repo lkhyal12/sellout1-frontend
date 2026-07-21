@@ -8,6 +8,7 @@ export const useCartStore = create((set, get) => ({
   loading: false,
   error: null,
   laodingProducts: false,
+  loadingSession: false,
   getCartProducts: async () => {
     set({ laodingProducts: true });
     try {
@@ -64,6 +65,21 @@ export const useCartStore = create((set, get) => ({
     } catch (err) {
       const errMsg = getErrMsg(err);
       toast.error(errMsg);
+    }
+  },
+
+  // create stripe session
+  createStripeSession: async () => {
+    set({ loadingSession: true });
+    try {
+      const response = await axiosInstance.post("/checkout/create-session");
+
+      window.location = response.data.url;
+    } catch (err) {
+      const errMsg = getErrMsg(err);
+      toast.error(errMsg);
+    } finally {
+      set({ loadingSession: false });
     }
   },
 }));

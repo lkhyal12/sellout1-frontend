@@ -3,7 +3,7 @@ import SignUpPage from "./pages/SignUpPage";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import { Toaster } from "react-hot-toast";
-
+import mainBgImg from "./assets/background.png";
 import { useEffect } from "react";
 import { useAuthStore } from "./store/authStore";
 import { LoaderCircle } from "lucide-react";
@@ -43,7 +43,10 @@ const App = () => {
     <>
       {/* <Navbar /> */}
       <Toaster position="top-center" />
-      <main className="min-h-dvh bg-background">
+      <main className="min-h-dvh ">
+        <div className="fixed inset-0 -z-10 w-screen h-dvh">
+          <img src={mainBgImg} alt="" className="size-full object-cover" />
+        </div>
         <Routes>
           <Route path="/" element={<AppLayout />}>
             <Route index element={<HomePage />} />

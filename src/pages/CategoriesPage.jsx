@@ -19,7 +19,7 @@ const CategoriesPage = () => {
           Explore our newest collections and exclusive deals.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 px-5 bg-background mt-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 px-5  mt-10">
           {categories.map((category, i) => (
             <Link
               key={category.name}

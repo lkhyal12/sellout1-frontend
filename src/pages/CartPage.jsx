@@ -9,8 +9,11 @@ import {
   Trash,
 } from "lucide-react";
 import EmptyCart from "../components/EmptyCart";
+import CartLoginRequired from "../components/CartLoginRequired";
+import { useAuthStore } from "../store/authStore";
 
 const CartPage = () => {
+  const { user, isCheckingAuth } = useAuthStore();
   const {
     cart,
     laodingProducts,
@@ -33,7 +36,7 @@ const CartPage = () => {
   useEffect(() => {
     getCartProducts();
   }, [getCartProducts]);
-
+  if (!user && !isCheckingAuth) return <CartLoginRequired />;
   if (laodingProducts)
     return (
       <div className="h-dvh w-full flex items-center justify-center bg-background text-white">

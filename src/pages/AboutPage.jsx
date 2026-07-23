@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import heroImg from "../assets/heroAbout.jpeg";
+import mainBgImg from "../assets/background.png";
 const features = [
   {
     icon: Truck,
@@ -58,8 +59,9 @@ export default function AboutPage() {
   const navigate = useNavigate();
 
   return (
-    <main className="bg-background text-white">
+    <main className=" text-white">
       {/* Hero */}
+
       <section className="container mx-auto px-4 pt-28 pb-24 text-center">
         <div className="mx-auto w-20 h-20 rounded-full bg-orange-primary/10 flex items-center justify-center">
           <Package className="text-orange-primary" size={38} />

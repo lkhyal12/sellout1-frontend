@@ -2,8 +2,11 @@ import { useRef, useState } from "react";
 import { categories } from "../pages/CategoriesPage";
 import { Loader, PlusCircle, Upload } from "lucide-react";
 import { useProductStore } from "../store/productStore";
+import { useAuthStore } from "../store/authStore";
+import { Link, Navigate } from "react-router-dom";
 
 const CreateProductForm = ({ productData, setProductData }) => {
+  const { user, isAdmin } = useAuthStore();
   const { createProduct } = useProductStore();
   const [loading, setLoading] = useState(false);
   const inputRef = useRef();
@@ -47,6 +50,7 @@ const CreateProductForm = ({ productData, setProductData }) => {
       });
     }
   }
+
   return (
     <div className="w-[95%] max-w-xl mx-auto bg-surface shadow-sm p-4 mt-5 rounded-lg">
       <h3 className="text-xl md:text-2xl font-semibold text-orange-primary mb-3">
@@ -116,7 +120,7 @@ const CreateProductForm = ({ productData, setProductData }) => {
             </option>
             <>
               {categories.map((category) => (
-                <option value={category.name.toLowerCase()}>
+                <option key={category.name} value={category.name.toLowerCase()}>
                   {category.name}
                 </option>
               ))}

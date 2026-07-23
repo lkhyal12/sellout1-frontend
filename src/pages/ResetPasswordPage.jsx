@@ -1,7 +1,7 @@
 import { ArrowLeft, Loader, ShieldCheck, Lock } from "lucide-react";
 
 import { useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
 import sheildImg from "../assets/sheild.png";
 import toast from "react-hot-toast";
@@ -9,7 +9,7 @@ const ResetPasswordPage = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
-  const { loading, resetPassword } = useAuthStore();
+  const { user, loading, resetPassword } = useAuthStore();
   const { code } = useParams();
 
   async function handleSubmit() {
@@ -20,6 +20,7 @@ const ResetPasswordPage = () => {
     const { success } = await resetPassword(code, password);
     if (success) return navigate("/login");
   }
+  if (user) return <Navigate to="/" replace={true} />;
   return (
     <div className="h-dvh w-full overflow-hidden">
       <div className="grid grid-cols-1 md:grid-cols-2">

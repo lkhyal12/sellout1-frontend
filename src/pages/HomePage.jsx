@@ -7,7 +7,7 @@ const HomePage = () => {
     <div className="h-dvh pt-15">
       <div className="h-full w-full relative">
         {/* background image */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 ">
           <img src={wardrobeImg} alt="" className="size-full object-cover" />
         </div>
         {/* layout */}

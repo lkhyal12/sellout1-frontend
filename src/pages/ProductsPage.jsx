@@ -18,7 +18,7 @@ const ProductsPage = () => {
       </div>
     );
   return (
-    <div className="min-h-dvh py-10 bg-background">
+    <div className="min-h-dvh py-10 ">
       <h1 className="text-orange-primary text-center pageTitle font-bold ">
         {category.toUpperCase()}
       </h1>

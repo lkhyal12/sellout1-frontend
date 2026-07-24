@@ -27,6 +27,7 @@ export const useAuthStore = create((set) => ({
       });
       return { success: true };
     } catch (err) {
+      console.log(err);
       const errMsg = getErrMsg(err);
       toast.error(errMsg);
       return { success: false };

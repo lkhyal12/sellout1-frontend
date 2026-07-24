@@ -54,6 +54,7 @@ const Navbar = () => {
           user={user}
           isAdmin={isAdmin}
           handleLogout={handleLogout}
+          isAdmin={isAdmin}
         />
       )}
     </div>
@@ -162,6 +163,7 @@ function MobileNavbar({ navigate, user, cart, isAdmin, handleLogout }) {
             handleLogout={handleLogout}
             isMenuOpen={isMenuOpen}
             setIsMenuOpen={setIsMenuOpen}
+            isAdmin={isAdmin}
           />
         )}
       </div>
@@ -187,11 +189,11 @@ function MobileNavbar({ navigate, user, cart, isAdmin, handleLogout }) {
   );
 }
 
-function NavMenu({ user, handleLogout, setIsMenuOpen, isMenuOpen }) {
+function NavMenu({ user, handleLogout, setIsMenuOpen, isMenuOpen, isAdmin }) {
   const menuRef = useRef();
 
   return (
-    <div className="fixed top-16 w-full inset-0 z-9999 h-[60dvh]">
+    <div className="fixed top-16 w-full inset-0 z-9999 h-fit">
       <div className="h-full w-8/10 mx-auto bg-background/80 shadow rounded-2xl flex flex-col items-start px-5 gap-5 py-5">
         <Link to="/" className="flex items-center gap-5 text-lg w-full">
           <Home className="text-orange-primary" size={20} /> Home
@@ -215,7 +217,7 @@ function NavMenu({ user, handleLogout, setIsMenuOpen, isMenuOpen }) {
             <UserPlus className="text-orange-primary" size={20} /> Sign Up
           </Link>
         )}
-        {!user && (
+        {user && (
           <button
             onClick={handleLogout}
             to="/login"
@@ -224,7 +226,7 @@ function NavMenu({ user, handleLogout, setIsMenuOpen, isMenuOpen }) {
             <LogOut className="text-orange-primary" size={20} /> Logout
           </button>
         )}
-        {!user && (
+        {user && isAdmin && (
           <Link
             to="/dashboard"
             className="flex items-center gap-3 text-lg w-full"

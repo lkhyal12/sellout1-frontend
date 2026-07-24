@@ -202,7 +202,7 @@ function NavMenu({ user, handleLogout, setIsMenuOpen, isMenuOpen, isAdmin }) {
           <Info className="text-orange-primary" size={20} /> About
         </Link>
 
-        <Link to="/about" className="flex items-center gap-3 text-lg w-full">
+        <Link to="/categories" className="flex items-center gap-3 text-lg w-full">
           <LayoutGrid className="text-orange-primary" size={20} /> Categories
         </Link>
 

@@ -84,7 +84,7 @@ const CartPage = () => {
             <div className="flex items-center justify-between">
               {/* left side */}
               <div className="flex flex-col gap-1  mt-4 text-text-secondary text-sm">
-                <span>Subtotal</span>
+                <span>Total</span>
                 <span>Shipping</span>
                 <span>Discount</span>
               </div>

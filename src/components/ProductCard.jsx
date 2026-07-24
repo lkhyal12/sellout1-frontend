@@ -1,11 +1,16 @@
 import { Loader, ShoppingCart } from "lucide-react";
 import { useCartStore } from "../store/cartStore";
 import { useState } from "react";
+import { useAuthStore } from "../store/authStore";
+import toast from "react-hot-toast";
 
 const ProductCard = ({ product }) => {
+  const { user } = useAuthStore();
   const { addToCartFun } = useCartStore();
   const [loading, setLoading] = useState(false);
   async function handleAddToCart(productId) {
+    if (!user)
+      return toast.error("Please Login First", { id: "Please Login First" });
     setLoading(true);
     await addToCartFun(productId);
     setLoading(false);
